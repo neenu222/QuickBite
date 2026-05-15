@@ -1,0 +1,416 @@
+{% extends "customer/customer_base.html" %}
+
+{% block content %}
+
+<style>
+    :root {
+        --primary-orange: #ff6b35;
+        --secondary-orange: #ff8c42;
+        --dark-orange: #e85d2e;
+        --light-orange: #fff5f2;
+        --accent-orange: #ffb088;
+    }
+
+    /* Edit Profile Container */
+    .edit-profile-container {
+        padding: 2rem 0;
+        min-height: 70vh;
+    }
+
+    /* Edit Card */
+    .edit-card {
+        background: white;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(255, 107, 53, 0.2);
+        border: 3px solid var(--light-orange);
+        animation: fadeInUp 0.6s ease-out;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Card Header */
+    .edit-header {
+        background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .edit-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .edit-header h4 {
+        color: white;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 1;
+    }
+
+    .edit-header h4::before {
+        content: '✏️ ';
+    }
+
+    /* Form Body */
+    .edit-body {
+        padding: 3rem 2.5rem;
+    }
+
+    /* Form Groups */
+    .form-group-custom {
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .form-label-custom {
+        font-weight: 700;
+        color: var(--dark-orange);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-label-custom::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        background: var(--primary-orange);
+        border-radius: 50%;
+    }
+
+    /* Input Wrapper */
+    .input-wrapper {
+        position: relative;
+    }
+
+    /* Unified Input Fields Styling */
+    .form-input-custom,
+    .form-input-custom[type="text"],
+    .form-input-custom[type="email"],
+    .form-input-custom[type="tel"],
+    .form-input-custom[type="file"],
+    textarea.form-input-custom {
+        width: 100%;
+        padding: 1rem 3rem 1rem 1.25rem;
+        border: 2px solid var(--light-orange);
+        border-radius: 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: var(--light-orange);
+        color: #333;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Textarea specific height */
+    textarea.form-input-custom {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    /* Unified Focus State */
+    .form-input-custom:focus,
+    textarea.form-input-custom:focus {
+        outline: none;
+        border-color: var(--primary-orange);
+        background: white;
+        box-shadow: 0 5px 20px rgba(255, 107, 53, 0.2);
+        transform: translateY(-2px);
+    }
+
+    /* Unified Hover State */
+    .form-input-custom:hover,
+    textarea.form-input-custom:hover {
+        border-color: var(--accent-orange);
+    }
+
+    /* File Input Specific Styling */
+    .form-input-custom[type="file"] {
+        cursor: pointer;
+    }
+
+    .form-input-custom[type="file"]::-webkit-file-upload-button {
+        display: none;
+    }
+
+    .form-input-custom[type="file"]::file-selector-button {
+        display: none;
+    }
+
+    .form-input-custom[type="file"]::before {
+        content: 'Choose File';
+        display: inline-block;
+        background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-right: 1rem;
+        box-shadow: 0 3px 10px rgba(255, 107, 53, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .form-input-custom[type="file"]:hover::before {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+    }
+
+    /* Input Icons */
+    .input-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-orange);
+        font-size: 1.2rem;
+        pointer-events: none;
+    }
+
+    /* Textarea Icon Position */
+    textarea.form-input-custom ~ .input-icon {
+        top: 1.25rem;
+        transform: translateY(0);
+    }
+
+    /* Button Container */
+    .button-container {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2.5rem;
+        flex-wrap: wrap;
+    }
+
+    /* Save Button */
+    .btn-save {
+        background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+        color: white;
+        padding: 1rem 2.5rem;
+        border: none;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .btn-save:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+    }
+
+    .btn-save::before {
+        content: '💾';
+        font-size: 1.3rem;
+    }
+
+    /* Cancel Button */
+    .btn-cancel {
+        background: white;
+        color: #6c757d;
+        padding: 1rem 2.5rem;
+        border: 3px solid #dee2e6;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .btn-cancel:hover {
+        background: #6c757d;
+        color: white;
+        border-color: #6c757d;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
+    }
+
+    .btn-cancel::before {
+        content: '✕';
+        font-size: 1.3rem;
+    }
+
+    /* Info Box */
+    .info-box {
+        background: linear-gradient(135deg, var(--light-orange) 0%, #ffffff 100%);
+        padding: 1.25rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        border-left: 5px solid var(--primary-orange);
+    }
+
+    .info-box p {
+        margin: 0;
+        color: #555;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-box p::before {
+        content: 'ℹ️';
+        font-size: 1.2rem;
+    }
+
+    /* Placeholder Styling */
+    .form-input-custom::placeholder,
+    textarea.form-input-custom::placeholder {
+        color: #999;
+        opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .edit-body {
+            padding: 2rem 1.5rem;
+        }
+
+        .edit-header h4 {
+            font-size: 1.6rem;
+        }
+
+        .button-container {
+            flex-direction: column;
+        }
+
+        .btn-save,
+        .btn-cancel {
+            width: 100%;
+        }
+
+        .form-input-custom,
+        textarea.form-input-custom {
+            padding: 0.875rem 2.5rem 0.875rem 1rem;
+        }
+    }
+</style>
+
+<div class="edit-profile-container">
+    <div class="container">
+        <div class="edit-card">
+            <div class="edit-header">
+                <h4>Edit Profile</h4>
+            </div>
+            <div class="edit-body">
+                <div class="info-box">
+                    <p>Update your profile information below. All fields are required.</p>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">First Name</label>
+                        <div class="input-wrapper">
+                            <input type="text" name="first_name" class="form-input-custom" value="{{ user.first_name }}"
+                                placeholder="Enter your first name" required>
+                            <i class="bi bi-person input-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Last Name</label>
+                        <div class="input-wrapper">
+                            <input type="text" name="last_name" class="form-input-custom" value="{{ user.last_name }}"
+                                placeholder="Enter your last name" required>
+                            <i class="bi bi-person-check input-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Email Address</label>
+                        <div class="input-wrapper">
+                            <input type="email" name="email" class="form-input-custom" value="{{ user.email }}"
+                                placeholder="Enter your email" required>
+                            <i class="bi bi-envelope input-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Phone Number</label>
+                        <div class="input-wrapper">
+                            <input type="tel" name="phone" class="form-input-custom" value="{{ profile.phone }}"
+                                placeholder="Enter your phone number" required>
+                            <i class="bi bi-telephone input-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Profile Picture</label>
+                        <div class="input-wrapper">
+                            <input type="file" name="profile_photo" class="form-input-custom" accept="image/*">
+                            <i class="bi bi-camera input-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom">Address</label>
+                        <div class="input-wrapper">
+                            <textarea name="address" class="form-input-custom" placeholder="Enter your address"
+                                required>{{ profile.address }}</textarea>
+                            <i class="bi bi-geo-alt input-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="button-container">
+                        <button type="submit" class="btn-save">
+                            Save Changes
+                        </button>
+                        <a href="{% url 'customer_profile' %}" class="btn-cancel">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

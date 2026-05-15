@@ -1,0 +1,23 @@
+{% extends 'seller/seller_base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h4>Customer Complaints</h4>
+
+  {% for c in complaints %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h6>{{ c.subject }}</h6>
+      <p>{{ c.message }}</p>
+
+      <span class="badge bg-warning">{{ c.status }}</span>
+      <small class="text-muted d-block mt-2">
+        By {{ c.customer.username }} • {{ c.created_at|date:"d M Y" }}
+      </small>
+    </div>
+  </div>
+  {% empty %}
+  <p>No complaints yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

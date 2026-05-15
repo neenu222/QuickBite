@@ -1,0 +1,248 @@
+{% extends "seller/seller_base.html" %}
+{% block content %}
+
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success text-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="bi bi-receipt-cutoff me-2"></i>Customer Orders
+                        </h4>
+                        <span class="badge bg-white text-success fs-6">
+                            <i class="bi bi-list-check me-1"></i>
+                            {{ orders|length }} Order{% if orders|length != 1 %}s{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 align-middle">
+                            <thead class="table-success">
+                                <tr>
+                                    <th class="py-3">
+                                        <i class="bi bi-hash me-1"></i>Order ID
+                                    </th>
+                                    <th class="py-3">
+                                        <i class="bi bi-person me-1"></i>Customer
+                                    </th>
+                                    <th class="py-3">
+                                        <i class="bi bi-bag me-1"></i>Items
+                                    </th>
+                                    <th class="py-3">
+                                        <i class="bi bi-currency-rupee me-1"></i>Total
+                                    </th>
+                                    <th class="py-3">
+                                        <i class="bi bi-info-circle me-1"></i>Status
+                                    </th>
+                                    <th class="py-3 text-center">
+                                        <i class="bi bi-gear me-1"></i>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-success bg-opacity-10 text-success fw-bold fs-6 px-3 py-2">
+                                            #{{ order.id }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="customer-icon me-2">
+                                                <i class="bi bi-person-circle text-success"></i>
+                                            </div>
+                                            <span class="fw-semibold">{{ order.customer.user.username }}</span>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <ul class="list-unstyled mb-0 small">
+                                            {% for item in order.items.all %}
+                                                <li class="mb-1">
+                                                    <i class="bi bi-dot text-success"></i>
+                                                    <span class="fw-semibold">{{ item.food_item.name }}</span>
+                                                    <span class="badge bg-success bg-opacity-10 text-success ms-1">
+                                                        × {{ item.quantity }}
+                                                    </span>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+
+                                    <td>
+                                        <span class="fw-bold text-success fs-5">₹{{ order.total_amount }}</span>
+                                    </td>
+
+                                    <td>
+                                        <span class="badge px-3 py-2 
+                                            {% if order.status == 'delivered' or order.status == 'DELIVERED' %}
+                                                bg-success
+                                            {% elif order.status == 'pending' or order.status == 'PENDING' %}
+                                                bg-warning text-dark
+                                            {% elif order.status == 'processing' or order.status == 'PROCESSING' %}
+                                                bg-info
+                                            {% elif order.status == 'cancelled' or order.status == 'CANCELLED' %}
+                                                bg-danger
+                                            {% else %}
+                                                bg-secondary
+                                            {% endif %}">
+                                            {{ order.get_status_display }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <form method="POST" action="{% url 'update_order_status' order.id %}" class="status-update-form">
+                                            {% csrf_token %}
+                                            <div class="d-flex gap-2 justify-content-center align-items-center">
+                                                <select name="status" class="form-select form-select-sm border-success" style="max-width: 150px;">
+                                                    {% for key, value in order.STATUS %}
+                                                        <option value="{{ key }}" {% if order.status == key %}selected{% endif %}>
+                                                            {{ value }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    <i class="bi bi-check-circle-fill"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center py-5">
+                                        <div class="text-muted">
+                                            <i class="bi bi-inbox fs-1 d-block mb-3 text-success opacity-50"></i>
+                                            <h5 class="mb-2">No Orders Received Yet</h5>
+                                            <p class="mb-0">New orders from customers will appear here</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tips Card -->
+    {% if orders %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-success border-2">
+                <div class="card-body">
+                    <h6 class="text-success mb-3">
+                        <i class="bi bi-lightbulb-fill me-2"></i>Order Management Tips
+                    </h6>
+                    <ul class="mb-0 text-muted small">
+                        <li class="mb-2">Update order status promptly to keep customers informed</li>
+                        <li class="mb-2">Change status to "Processing" when you start preparing the order</li>
+                        <li>Mark as "Delivered" once the order reaches the customer</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .table-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .table-success th {
+        border: none;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(40, 167, 69, 0.05);
+    }
+
+    .customer-icon {
+        font-size: 1.8rem;
+    }
+
+    .badge {
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+
+    .form-select:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+        transform: scale(1.1);
+    }
+
+    .border-success {
+        border-color: #28a745 !important;
+    }
+
+    .text-success {
+        color: #28a745 !important;
+    }
+
+    .bg-success {
+        background-color: #28a745 !important;
+    }
+
+    td, th {
+        padding: 1rem !important;
+    }
+
+    .status-update-form {
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        .table {
+            font-size: 0.85rem;
+        }
+
+        td, th {
+            padding: 0.75rem !important;
+        }
+
+        .form-select {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+
+{% endblock %}

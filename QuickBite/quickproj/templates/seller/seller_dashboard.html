@@ -1,0 +1,160 @@
+{% extends "seller/seller_base.html" %}
+{% block content %}
+
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="bg-white rounded-3 shadow-sm p-4">
+                <h2 class="text-success mb-2">
+                    <i class="bi bi-speedometer2 me-2"></i>Seller Dashboard
+                </h2>
+                <p class="text-muted mb-0">Welcome back! Here's your business overview</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-success border-2 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="text-success mb-0 text-uppercase fw-semibold">Total Foods</h6>
+                        <i class="bi bi-egg-fried fs-3 text-success"></i>
+                    </div>
+                    <h2 class="mb-2 text-dark fw-bold">{{ total_foods }}</h2>
+                    <p class="text-muted small mb-0">Menu items available</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-success border-2 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="text-success mb-0 text-uppercase fw-semibold">Total Orders</h6>
+                        <i class="bi bi-receipt fs-3 text-success"></i>
+                    </div>
+                    <h2 class="mb-2 text-dark fw-bold">{{ total_orders }}</h2>
+                    <p class="text-muted small mb-0">All time orders</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-success border-2 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="text-success mb-0 text-uppercase fw-semibold">Pending Orders</h6>
+                        <i class="bi bi-clock-history fs-3 text-success"></i>
+                    </div>
+                    <h2 class="mb-2 text-dark fw-bold">{{ pending_orders }}</h2>
+                    <p class="text-muted small mb-0">Awaiting action</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-success border-2 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="text-success mb-0 text-uppercase fw-semibold">Total Sales</h6>
+                        <i class="bi bi-currency-rupee fs-3 text-success"></i>
+                    </div>
+                    <h2 class="mb-2 text-dark fw-bold">₹{{ total_sales }}</h2>
+                    <p class="text-muted small mb-0">Revenue generated</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-lightning-charge-fill me-2"></i>Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <a href="{% url 'seller_foods' %}"
+                                class="btn btn-success w-100 py-3 d-flex align-items-center justify-content-between">
+                                <span>
+                                    <i class="bi bi-basket2-fill me-2"></i>
+                                    Manage Foods
+                                </span>
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'sales_report' %}"
+                                class="btn btn-outline-success w-100 py-3 d-flex align-items-center justify-content-between">
+                                <span>
+                                    <i class="bi bi-file-earmark-bar-graph-fill me-2"></i>
+                                    Sales Report
+                                </span>
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(40, 167, 69, 0.15) !important;
+    }
+
+    .btn {
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+
+    .btn-outline-success {
+        color: #28a745;
+        border-color: #28a745;
+        border-width: 2px;
+    }
+
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+    }
+
+    .border-success {
+        border-color: #28a745 !important;
+    }
+
+    .text-success {
+        color: #28a745 !important;
+    }
+
+    .bg-success {
+        background-color: #28a745 !important;
+    }
+</style>
+
+{% endblock %}

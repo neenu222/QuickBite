@@ -1,0 +1,442 @@
+{% extends 'customer/customer_base.html' %}
+
+{% block content %}
+
+<style>
+    :root {
+        --primary-orange: #ff6b35;
+        --secondary-orange: #ff8c42;
+        --dark-orange: #e85d2e;
+        --light-orange: #fff5f2;
+        --accent-orange: #ffb088;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+        color: white;
+        padding: 3rem 0;
+        border-radius: 20px;
+        margin-bottom: 3rem;
+        box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+    }
+
+    .hero-section h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        margin-bottom: 1rem;
+    }
+
+    .hero-section p {
+        font-size: 1.3rem;
+        font-weight: 400;
+        opacity: 0.95;
+    }
+
+    /* Section Headers */
+    .section-header {
+        position: relative;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+    }
+
+    .section-header h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-orange);
+        display: inline-block;
+        position: relative;
+    }
+
+    .section-header h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-orange), var(--secondary-orange));
+        border-radius: 2px;
+    }
+
+    /* Category Cards */
+    .category-list {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .category-item {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border: 2px solid transparent;
+    }
+
+    .category-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        border-color: var(--primary-orange);
+    }
+
+    .category-item a {
+        text-decoration: none;
+        color: var(--primary-orange);
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .category-item.activate { 
+        border-color: var(--primary-orange);
+        background: var(--light-orange);
+    }
+
+    .category-item a::before {
+        content: '🍽️';
+        font-size: 1.5rem;
+    }
+
+    /* Food Grid Container */
+    .food-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .food-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .food-card {
+            padding: 1rem;
+        }
+
+        .food-image,
+        .food-image-placeholder {
+            height: 120px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .food-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .food-card h3 {
+            font-size: 1.2rem;
+        }
+    }
+
+    /* Food Item Cards */
+    .food-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .food-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+        border-color: var(--accent-orange);
+    }
+
+    .food-card h3 {
+        color: var(--dark-orange);
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+    }
+
+    .food-card p {
+        margin-bottom: 0.5rem;
+        color: #555;
+        line-height: 1.4;
+        font-size: 0.9rem;
+        max-height: 3.6em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .food-image {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .food-image-placeholder {
+        width: 100%;
+        height: 150px;
+        background: var(--light-orange);
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-orange);
+        font-size: 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .food-image-placeholder span {
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .food-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-orange);
+        margin: 1rem 0;
+    }
+
+    .seller-info {
+        background: var(--light-orange);
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        display: inline-block;
+        font-weight: 500;
+        color: var(--dark-orange);
+        margin-bottom: 1rem;
+    }
+
+    .seller-info::before {
+        content: '🏪 ';
+    }
+
+    /* Action Buttons */
+    .food-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .btn-view {
+        background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+        color: white;
+        padding: 0.6rem 1.5rem;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+    }
+
+    .btn-view:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        color: white;
+    }
+
+    .btn-cart {
+        background: white;
+        color: var(--primary-orange);
+        padding: 0.6rem 1.5rem;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: 600;
+        border: 2px solid var(--primary-orange);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+    }
+
+    .btn-cart:hover {
+        background: var(--primary-orange);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        background: var(--light-orange);
+        border-radius: 15px;
+        color: var(--dark-orange);
+    }
+
+    .empty-state::before {
+        content: '🍽️';
+        font-size: 4rem;
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    /* Divider */
+    .section-divider {
+        border: none;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, var(--accent-orange), transparent);
+        margin: 3rem 0;
+    }
+
+    /* Search Bar Styling */
+    .search-group {
+        min-width: 150px;
+        margin-left: 1rem;
+    }
+
+    .search-input {
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 25px 0 0 25px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 0.6rem 1.25rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        background: white;
+        border-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .search-btn {
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-left: none;
+        border-radius: 0 25px 25px 0;
+        color: var(--primary-orange);
+        padding: 0.6rem 1.25rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+        background: white;
+        color: var(--dark-orange);
+        transform: translateY(-2px);
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-section text-center">
+    <h1>Welcome to QuickBite</h1>
+    <p>Order your favorite food from nearby sellers.</p>
+    <!-- Search Bar -->
+    <form class="d-flex" method="GET" >
+        <div class="input-group search-group">
+            <input type="text" name="q" class="form-control search-input" placeholder="Search food"
+                aria-label="Search">
+            <button class="btn search-btn" type="submit">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- ================= FOOD CATEGORIES ================= -->
+<section>
+    <div class="section-header">
+        <h2>Food Categories</h2>
+    </div>
+
+    <ul class="category-list">
+        <li class="category-item" {% if not activate_category %}activate{% endif %}>
+            <a href="{% url 'customer_home' %}">All</a>
+        </li>
+        {% for category in categories %}
+        <li class="category-item {% if activate_category and category.id == activate_category.id %}activate{% endif %}">
+            <a href="{% url 'customer_home' %}?category={{ category.id }}">
+                {{ category.name }}
+            </a>
+        </li>
+        {% empty %}
+        <li class="empty-state">No categories available.</li>
+        {% endfor %}
+    </ul>
+</section>
+
+<hr class="section-divider">
+
+<!-- ================= FOOD ITEMS ================= -->
+<section>
+    <div class="section-header">
+        <h2>Available Food Items</h2>
+    </div>
+
+    <div class="food-grid">
+        {% for item in food_items %}
+        <div class="food-card">
+            {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="food-image">
+            {% else %}
+            <div class="food-image-placeholder">
+                <i class="bi bi-image"></i>
+                <span>No Image</span>
+            </div>
+            {% endif %}
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.description }}</p>
+            <!-- <p class="food-price">Price: ₹{{ item.price }}</p>
+            {% if item.discount_percent > 0 %}
+                <del>₹{{ item.price }}</del>
+                <span class="badge bg-danger">{{ item.discount_percent }}% OFF</span>
+                <p class="food-price">₹{{ item.discounted_price }}</p>
+            {% else %}
+                <p class="food-price">₹{{ item.price }}</p>
+            {% endif %} -->
+            {% if item.discount_percent > 0 %}
+                <p class="food-price">
+                    ₹{{ item.discounted_price }}
+                    <small class="text-muted">
+                        <del>₹{{ item.price }}</del>
+                    </small>
+                    <span class="badge bg-danger ms-2">{{ item.discount_percent }}% OFF</span>
+                </p>
+            {% else %}
+                <p class="food-price">₹{{ item.price }}</p>
+            {% endif %}
+
+
+            <p class="seller-info">Seller: {{ item.seller.shop_name }}</p>
+
+            <div class="food-actions mt-auto">
+                <a href="{% url 'food_detail' item.id %}" class="btn-view">
+                    <i class="bi bi-eye-fill"></i> View Details
+                </a>
+                <a href="{% url 'add_to_cart' item.id %}" class="btn-cart">
+                    <i class="bi bi-cart-plus-fill"></i> Add to Cart
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="empty-state">No food items available.</p>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h4>Complaints Management</h4>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Seller</th>
+        <th>Subject</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in complaints %}
+      <tr>
+        <td>{{ c.customer.username }}</td>
+        <td>{{ c.seller.username }}</td>
+        <td>{{ c.subject }}</td>
+        <td>
+          <span class="badge bg-info">{{ c.status }}</span>
+        </td>
+        <td>{{ c.created_at|date:"d M Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

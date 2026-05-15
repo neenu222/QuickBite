@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Registration - QuickBite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+            font-weight: 700;
+        }
+
+        header p {
+            color: #f97316;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .register-container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .register-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .register-header {
+            background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+            padding: 2rem 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .register-header h2 {
+            margin: 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .register-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.95;
+            font-size: 0.95rem;
+            color: white;
+            letter-spacing: normal;
+        }
+
+        .register-body {
+            padding: 2rem 2rem;
+            max-height: 65vh;
+            overflow-y: auto;
+        }
+
+        .register-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .register-body::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .register-body::-webkit-scrollbar-thumb {
+            background: #fb923c;
+            border-radius: 10px;
+        }
+
+        .register-body::-webkit-scrollbar-thumb:hover {
+            background: #f97316;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group-custom {
+            position: relative;
+        }
+
+        .input-group-custom i {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            color: #9ca3af;
+            font-size: 1rem;
+            z-index: 10;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 2.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control-custom:focus {
+            outline: none;
+            border-color: #fb923c;
+            box-shadow: 0 0 0 4px rgba(251, 146, 60, 0.1);
+        }
+
+        textarea.form-control-custom {
+            resize: vertical;
+            min-height: 90px;
+            padding-top: 1rem;
+        }
+
+        .textarea-wrapper i {
+            top: 1rem;
+        }
+
+        input[type="file"].form-control-custom {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 0.875rem;
+            background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(251, 146, 60, 0.4);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #9ca3af;
+            z-index: 10;
+        }
+
+        .password-toggle:hover {
+            color: #fb923c;
+        }
+
+        .login-link-container {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .login-link-text {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .btn-login-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.75rem;
+            background: white;
+            color: #f97316;
+            border: 2px solid #f97316;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login-link:hover {
+            background: #f97316;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .required-indicator {
+            color: #ef4444;
+            margin-left: 0.25rem;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer small {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.75rem;
+            }
+
+            header p {
+                font-size: 0.85rem;
+            }
+
+            .register-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .register-body {
+                padding: 1.75rem 1.5rem;
+                max-height: 60vh;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .register-container {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .register-body {
+                max-height: 55vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ================= HEADER ================= -->
+    <header>
+        <h1>
+            🍔 QuickBite
+        </h1>
+        <p>
+            Fast • Fresh • Delivered
+        </p>
+    </header>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main>
+        <div class="register-container">
+            <div class="register-card">
+                <div class="register-header">
+                    <h2>
+                        <i class="fas fa-user-plus"></i>
+                        Customer Registration
+                    </h2>
+                    <p>Create your account to start ordering delicious food</p>
+                </div>
+
+                <div class="register-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user"></i>
+                                Username
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <div class="input-group-custom">
+                                <i class="fas fa-user"></i>
+                                <input type="text" name="username" class="form-control-custom"
+                                    placeholder="Choose a unique username" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-envelope"></i>
+                                Email Address
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <div class="input-group-custom">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" name="email" class="form-control-custom"
+                                    placeholder="your.email@example.com" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-image"></i>
+                                Profile Picture
+                            </label>
+                            <input type="file" name="profile_photo" class="form-control-custom" accept="image/*">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-phone"></i>
+                                Phone Number
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <div class="input-group-custom">
+                                <i class="fas fa-phone"></i>
+                                <input type="tel" name="phone" class="form-control-custom"
+                                    placeholder="Enter your phone number" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Delivery Address
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <div class="input-group-custom textarea-wrapper">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <textarea name="address" rows="3" class="form-control-custom"
+                                    placeholder="Enter your complete delivery address" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-lock"></i>
+                                Password
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <div class="input-group-custom">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" name="password" id="passwordInput" class="form-control-custom"
+                                    placeholder="Create a strong password" required>
+                                <span class="password-toggle" onclick="togglePassword()">
+                                    <i class="fas fa-eye" id="toggleIconPassword"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-lock"></i>
+                                Confirm Password
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <div class="input-group-custom">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" name="confirm_password" id="confirmPasswordInput"
+                                    class="form-control-custom" placeholder="Confirm your password" required>
+                                <span class="password-toggle" onclick="toggleConfirmPassword()">
+                                    <i class="fas fa-eye" id="toggleIconConfirm"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-register">
+                            <i class="fas fa-user-check"></i>
+                            Create Customer Account
+                        </button>
+                    </form>
+
+                    <div class="login-link-container">
+                        <p class="login-link-text">Already have an account?</p>
+                        <a href="{% url 'login' %}" class="btn-login-link">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login to Your Account
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <small>
+            © 2024 QuickBite. All rights reserved.
+        </small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('passwordInput');
+            const toggleIcon = document.getElementById('toggleIconPassword');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        function toggleConfirmPassword() {
+            const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+            const toggleIcon = document.getElementById('toggleIconConfirm');
+
+            if (confirmPasswordInput.type === 'password') {
+                confirmPasswordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                confirmPasswordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Phone number formatting
+        const phoneInput = document.querySelector('input[name="phone"]');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, '');
+                e.target.value = value;
+            });
+        }
+
+        // Password matching validation
+        document.querySelector("form").addEventListener("submit", function (e) {
+            const password = document.querySelector('input[name="password"]').value;
+            const confirm = document.querySelector('input[name="confirm_password"]').value;
+
+            if (password !== confirm) {
+                e.preventDefault();
+                alert("Passwords do not match!");
+            }
+        });
+    </script>
+</body>
+
+</html>

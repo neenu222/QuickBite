@@ -1,0 +1,293 @@
+{% extends "adminpanel/admin_base.html" %}
+
+{% block content %}
+<style>
+    .dashboard-header {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        border-radius: 16px;
+        padding: 2rem;
+        color: white;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 16px rgba(30, 58, 138, 0.2);
+    }
+
+    .dashboard-header h3 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .dashboard-header p {
+        margin: 0.5rem 0 0 0;
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(30, 58, 138, 0.15);
+        border-color: #3b82f6;
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        color: #1e3a8a;
+    }
+
+    .stat-card.users .stat-icon {
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        color: #1e3a8a;
+    }
+
+    .stat-card.customers .stat-icon {
+        background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+        color: #5b21b6;
+    }
+
+    .stat-card.sellers .stat-icon {
+        background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+        color: #9f1239;
+    }
+
+    .stat-card.orders .stat-icon {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        color: #065f46;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: #64748b;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-description {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        margin: 0;
+    }
+
+    .quick-actions {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+    }
+
+    .quick-actions h4 {
+        color: #1e3a8a;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .action-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .action-btn {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border: 2px solid #bfdbfe;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        color: #1e3a8a;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-align: left;
+    }
+
+    .action-btn:hover {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        color: white;
+        transform: translateX(8px);
+        border-color: #3b82f6;
+    }
+
+    .action-btn i {
+        font-size: 1.5rem;
+    }
+
+    .info-section {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border-radius: 16px;
+        padding: 2rem;
+        border-left: 4px solid #3b82f6;
+    }
+
+    .info-section h5 {
+        color: #1e3a8a;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .info-section p {
+        color: #475569;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+        }
+
+        .action-buttons {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="dashboard-header">
+    <h3>
+        <i class="fas fa-chart-line"></i>
+        Dashboard Overview
+    </h3>
+    <p>Welcome back, Admin! Here's your platform overview at a glance.</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card users">
+        <div class="stat-icon">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value">{{ total_users }}</div>
+        <p class="stat-description">Registered platform users</p>
+    </div>
+
+    <div class="stat-card customers">
+        <div class="stat-icon">
+            <i class="fas fa-user-friends"></i>
+        </div>
+        <div class="stat-label">Total Customers</div>
+        <div class="stat-value">{{ total_customers }}</div>
+        <p class="stat-description">Active customers ordering food</p>
+    </div>
+
+    <div class="stat-card sellers">
+        <div class="stat-icon">
+            <i class="fas fa-store"></i>
+        </div>
+        <div class="stat-label">Total Sellers</div>
+        <div class="stat-value">{{ total_sellers }}</div>
+        <p class="stat-description">Restaurant partners</p>
+    </div>
+
+    <div class="stat-card orders">
+        <div class="stat-icon">
+            <i class="fas fa-shopping-cart"></i>
+        </div>
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-value">{{ total_orders }}</div>
+        <p class="stat-description">Orders placed on platform</p>
+    </div>
+</div>
+
+<div class="quick-actions">
+    <h4>
+        <i class="fas fa-bolt"></i>
+        Quick Actions
+    </h4>
+    <div class="action-buttons">
+        <a href="{% url 'admin_sellers' %}" class="action-btn">
+            <i class="fas fa-store"></i>
+            <span>Manage Sellers</span>
+        </a>
+        <a href="{% url 'admin_customer' %}" class="action-btn">
+            <i class="fas fa-users"></i>
+            <span>View Customers</span>
+        </a>
+        <a href="{% url 'admin_orders' %}" class="action-btn">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Track Orders</span>
+        </a>
+        <a href="{% url 'admin_categories' %}" class="action-btn">
+            <i class="fas fa-tags"></i>
+            <span>Manage Categories</span>
+        </a>
+
+        <!-- <a href="{% url 'admin_complaints' %}" class="action-btn">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>Handle Complaints</span>
+        </a> -->
+    </div>
+</div>
+
+<div class="info-section">
+    <h5>
+        <i class="fas fa-info-circle"></i>
+        Admin Tips
+    </h5>
+    <p>
+        Monitor your platform's health through these key metrics. Click on any quick action above to navigate directly
+        to the management section. Keep track of complaints and ensure timely resolution for the best customer
+        experience.
+    </p>
+</div>
+
+{% endblock %}

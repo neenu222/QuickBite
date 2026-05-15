@@ -1,0 +1,245 @@
+{% extends "seller/seller_base.html" %}
+{% block content %}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <!-- Header Card -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-success text-white py-3">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Food Item
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Food Name -->
+                        <div class="mb-4">
+                            <label for="name" class="form-label fw-semibold text-success">
+                                <i class="bi bi-egg-fried me-1"></i>Food Name
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control form-control-lg border-success" id="name" name="name"
+                                value="{{ food.name }}" placeholder="Enter food name" required>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="mb-3">
+                            <label class="form-label">Food Category</label>
+                            <select name="category" class="form-control" required>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if food.category.id == category.id %}selected{% endif %}>
+                                        {{ category.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label fw-semibold text-success">
+                                <i class="bi bi-card-text me-1"></i>Description
+                            </label>
+                            <textarea class="form-control border-success" id="description" name="description" rows="4"
+                                placeholder="Describe your food item...">{{ food.description }}</textarea>
+                            <small class="text-muted">Provide details about ingredients or preparation</small>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="mb-4">
+                            <label for="price" class="form-label fw-semibold text-success">
+                                <i class="bi bi-currency-rupee me-1"></i>Price
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-success text-white border-success">
+                                    <i class="bi bi-currency-rupee"></i>
+                                </span>
+                                <input type="number" class="form-control border-success" id="price" name="price"
+                                    value="{{ food.price }}" step="0.01" min="0" placeholder="0.00" required>
+                            </div>
+                            <small class="text-muted">Current price in rupees</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="price" class="form-label fw-semibold text-success">
+                                <i class="bi bi-currency-rupee me-1"></i>Discount Rate
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-success text-white border-success">
+                                    <i class="bi bi-currency-rupee"></i>
+                                </span>
+                                <<input type="number" name="discount_percent" class="form-control" min="0" max="90"
+                                    value="{{ food.discount_percent }}">
+
+                            </div>
+                            <small class="text-muted">Discounted rate in percentage</small>
+                        </div>
+
+                        <!-- Availability Toggle -->
+                        <div class="mb-4">
+                            <div class="card bg-light border-success border-2">
+                                <div class="card-body">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="is_available"
+                                            name="is_available" {% if food.is_available %}checked{% endif %}
+                                            style="width: 3em; height: 1.5em; cursor: pointer;">
+                                        <label class="form-check-label fw-semibold text-success ms-2" for="is_available"
+                                            style="cursor: pointer;">
+                                            <i class="bi bi-check-circle me-1"></i>Food Item Available for Orders
+                                        </label>
+                                    </div>
+                                    <small class="text-muted d-block mt-2 ms-5">
+                                        Toggle this off to temporarily hide this item from customers
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="mb-4">
+                            <label for="image" class="form-label fw-semibold text-success">
+                                <i class="bi bi-image me-1"></i>Update Food Image
+                            </label>
+                            <input type="file" class="form-control border-success" id="image" name="image"
+                                accept="image/*">
+                            {% if food.image %}
+                            <div class="mt-2">
+                                <small class="text-muted">Current image:</small><br>
+                                <img src="{{ food.image.url }}" alt="{{ food.name }}"
+                                    style="max-width: 200px; max-height: 200px; border-radius: 8px; margin-top: 5px;">
+                            </div>
+                            {% endif %}
+                            <small class="text-muted">Leave empty to keep current image. Upload a new image to replace
+                                it.</small>
+                        </div>
+
+                        <!-- Divider -->
+                        <hr class="my-4">
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-3 justify-content-end">
+                            <a href="{% url 'seller_foods' %}" class="btn btn-outline-secondary btn-lg px-4">
+                                <i class="bi bi-x-circle me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg px-5">
+                                <i class="bi bi-check-circle-fill me-2"></i>Update Food Item
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Current Item Info -->
+            <div class="card border-success border-2">
+                <div class="card-body">
+                    <h6 class="text-success mb-3">
+                        <i class="bi bi-info-circle-fill me-2"></i>Editing: {{ food.name }}
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2 small">
+                                <strong>Current Status:</strong>
+                                {% if food.is_available %}
+                                <span class="badge bg-success">Available</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Unavailable</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-0 small">
+                                <strong>Current Price:</strong>
+                                <span class="text-success fw-bold">₹{{ food.price }}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus,
+    .form-control:active {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    .form-control-lg {
+        padding: 0.75rem 1rem;
+    }
+
+    .form-check-input:checked {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .form-check-input:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-outline-secondary {
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-secondary:hover {
+        transform: translateY(-2px);
+    }
+
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    .border-success {
+        border-color: #28a745 !important;
+    }
+
+    .text-success {
+        color: #28a745 !important;
+    }
+
+    .bg-success {
+        background-color: #28a745 !important;
+    }
+
+    .input-group-text {
+        font-weight: 600;
+    }
+
+    label {
+        font-size: 1rem;
+    }
+
+    .form-label i {
+        font-size: 1.1rem;
+    }
+
+    .badge {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+</style>
+
+{% endblock %}

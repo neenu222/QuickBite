@@ -1,0 +1,416 @@
+{% extends "customer/customer_base.html" %}
+
+{% block content %}
+
+<style>
+    :root {
+        --primary-orange: #ff6b35;
+        --secondary-orange: #ff8c42;
+        --dark-orange: #e85d2e;
+        --light-orange: #fff5f2;
+        --accent-orange: #ffb088;
+    }
+
+    /* Profile Container */
+    .profile-container {
+        padding: 2rem 0;
+    }
+
+    /* Profile Card */
+    .profile-card {
+        background: white;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(255, 107, 53, 0.2);
+        border: 3px solid var(--light-orange);
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Card Header */
+    .profile-header {
+        background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .profile-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .profile-header h4 {
+        color: white;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 1;
+    }
+
+    .profile-header i {
+        margin-right: 0.5rem;
+    }
+
+    /* Avatar Section */
+    .avatar-section {
+        text-align: center;
+        padding: 2rem 0 1rem;
+        position: relative;
+    }
+
+    .avatar-circle {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
+        animation: float 3s ease-in-out infinite;
+        border: 5px solid white;
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .avatar-circle i {
+        font-size: 4rem;
+        color: white;
+    }
+
+    .user-name {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--dark-orange);
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .user-email {
+        color: #6c757d;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+
+    /* Divider */
+    .profile-divider {
+        border: none;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, var(--accent-orange), transparent);
+        margin: 2rem 0;
+    }
+
+    /* Info Items */
+    .info-item {
+        background: var(--light-orange);
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin-bottom: 1.25rem;
+        transition: all 0.3s ease;
+        border-left: 5px solid var(--accent-orange);
+    }
+
+    .info-item:hover {
+        background: linear-gradient(135deg, var(--light-orange) 0%, #ffffff 100%);
+        border-left-color: var(--primary-orange);
+        transform: translateX(5px);
+        box-shadow: 0 5px 20px rgba(255, 107, 53, 0.2);
+    }
+
+    .info-label {
+        font-weight: 700;
+        color: var(--dark-orange);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-label::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        background: var(--primary-orange);
+        border-radius: 50%;
+    }
+
+    .info-value {
+        font-size: 1.1rem;
+        color: #333;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    /* Icon badges */
+    .info-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+    }
+
+    /* Info Row with Icon */
+    .info-row {
+        display: flex;
+        align-items: center;
+    }
+
+    .info-content {
+        flex: 1;
+    }
+
+    /* Back Button */
+    .btn-back-home {
+        background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+        color: white;
+        padding: 1rem 2.5rem;
+        border: none;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-back-home:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        color: white;
+    }
+
+    /* Stats Cards */
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .stat-card {
+        background: linear-gradient(135deg, var(--light-orange) 0%, #ffffff 100%);
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        border: 2px solid var(--accent-orange);
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
+        border-color: var(--primary-orange);
+    }
+
+    .stat-icon {
+        font-size: 2rem;
+        color: var(--primary-orange);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Badge */
+    .user-badge {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 20px;
+        font-weight: 600;
+        display: inline-block;
+        box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+        margin-top: 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .profile-header h4 {
+            font-size: 1.6rem;
+        }
+
+        .avatar-circle {
+            width: 100px;
+            height: 100px;
+        }
+
+        .avatar-circle i {
+            font-size: 3rem;
+        }
+
+        .user-name {
+            font-size: 1.5rem;
+        }
+
+        .info-item {
+            padding: 1.25rem;
+        }
+
+        .btn-back-home {
+            padding: 0.875rem 2rem;
+        }
+    }
+</style>
+
+<div class="profile-container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="profile-card">
+                <div class="profile-header">
+                    <h4>
+                        <i class="bi bi-person-circle"></i> My Profile
+                    </h4>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="avatar-section">
+
+                        {% if customer.profile_photo %}
+                        <img src="{{ customer.profile_photo.url }}" class="avatar-circle" style="object-fit: cover;">
+                        {% else %}
+                        <div class="avatar-circle">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        {% endif %}
+
+                        <h5 class="user-name">{{ customer.user.username }}</h5>
+                        <p class="user-email">{{ customer.user.email }}</p>
+                        <span class="user-badge">
+                            <i class="bi bi-patch-check-fill"></i> Verified Customer
+                        </span>
+
+                    </div>
+
+                    <a href="{% url 'edit_customer_profile' %}" class="btn btn-warning mt-3">
+                        Edit Profile
+                    </a>
+
+                    <hr class="profile-divider">
+
+                    <!-- Profile Information -->
+                    <div class="info-item">
+                        <div class="info-row">
+                            <div class="info-icon">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <div class="info-content">
+                                <label class="info-label">Phone</label>
+                                <p class="info-value">{{ customer.phone }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-row">
+                            <div class="info-icon">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </div>
+                            <div class="info-content">
+                                <label class="info-label">Address</label>
+                                <p class="info-value">{{ customer.address }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-row">
+                            <div class="info-icon">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <div class="info-content">
+                                <label class="info-label">Account Type</label>
+                                <p class="info-value text-capitalize">{{ customer.user.user_type }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-row">
+                            <div class="info-icon">
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+                            <div class="info-content">
+                                <label class="info-label">Joined On</label>
+                                <p class="info-value">
+                                    {{ customer.user.date_joined|date:"d M Y" }}
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <a href="{% url 'customer_home' %}" class="btn-back-home">
+                            <i class="bi bi-arrow-left-circle"></i> Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

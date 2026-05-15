@@ -1,0 +1,23 @@
+{% extends 'customer/customer_base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h4>Raise a Complaint</h4>
+
+  <form method="post" class="mt-3">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="form-label">Subject</label>
+      <input type="text" name="subject" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Message</label>
+      <textarea name="message" rows="4" class="form-control" required></textarea>
+    </div>
+
+    <button class="btn btn-danger">Submit Complaint</button>
+  </form>
+</div>
+{% endblock %}

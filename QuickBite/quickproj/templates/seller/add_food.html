@@ -1,0 +1,183 @@
+{% extends "seller/seller_base.html" %}
+{% block content %}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <!-- Header Card -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-success text-white py-3">
+                    <h4 class="mb-0">
+                        <i class="bi bi-plus-circle-fill me-2"></i>Add Food Item
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Food Name -->
+                        <div class="mb-4">
+                            <label for="name" class="form-label fw-semibold text-success">
+                                <i class="bi bi-egg-fried me-1"></i>Food Name
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control form-control-lg border-success" id="name" name="name"
+                                placeholder="Enter food name (e.g., Margherita Pizza)" required>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="mb-3">
+                            <label class="form-label">Food Category</label>
+                            <select name="category" class="form-control" required>
+                                <option value="">-- Select Category --</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}">
+                                    {{ category.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label fw-semibold text-success">
+                                <i class="bi bi-card-text me-1"></i>Description
+                            </label>
+                            <textarea class="form-control border-success" id="description" name="description" rows="4"
+                                placeholder="Describe your food item... (ingredients, taste, etc.)"></textarea>
+                            <small class="text-muted">Optional: Add details about ingredients or preparation</small>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="mb-4">
+                            <label for="price" class="form-label fw-semibold text-success">
+                                <i class="bi bi-currency-rupee me-1"></i>Price
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-success text-white border-success">
+                                    <i class="bi bi-currency-rupee"></i>
+                                </span>
+                                <input type="number" class="form-control border-success" id="price" name="price"
+                                    step="0.01" min="0" placeholder="0.00" required>
+                            </div>
+                            <small class="text-muted">Enter price in rupees</small>
+                        </div>
+                        <!-- Discount -->
+                        <div class="mb-3">
+                            <label class="form-label">Discount (%)</label>
+                            <input type="number" name="discount_percent" class="form-control" min="0" max="90"
+                                value="0">
+                            <small class="text-muted">Optional. Max 90%</small>
+                        </div>
+
+
+                        <!-- Image Upload -->
+                        <div class="mb-4">
+                            <label for="image" class="form-label fw-semibold text-success">
+                                <i class="bi bi-image me-1"></i>Food Image
+                            </label>
+                            <input type="file" class="form-control form-control-lg border-success" id="image"
+                                name="image" accept="image/*">
+                            <small class="text-muted">Upload a clear image of your food item (JPG, PNG)</small>
+                        </div>
+
+                        <!-- Divider -->
+                        <hr class="my-4">
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-3 justify-content-end">
+                            <a href="{% url 'seller_foods' %}" class="btn btn-outline-secondary btn-lg px-4">
+                                <i class="bi bi-x-circle me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg px-5">
+                                <i class="bi bi-check-circle-fill me-2"></i>Add Food Item
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Card -->
+            <div class="card border-success border-2">
+                <div class="card-body">
+                    <h6 class="text-success mb-3">
+                        <i class="bi bi-info-circle-fill me-2"></i>Tips for Adding Food Items
+                    </h6>
+                    <ul class="mb-0 text-muted small">
+                        <li class="mb-2">Use clear, appetizing names for your dishes</li>
+                        <li class="mb-2">Write detailed descriptions to attract customers</li>
+                        <li class="mb-2">Set competitive prices based on your market</li>
+                        <li>Upload high-quality images for better presentation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus,
+    .form-control:active {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    .form-control-lg {
+        padding: 0.75rem 1rem;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-outline-secondary {
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-secondary:hover {
+        transform: translateY(-2px);
+    }
+
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    .border-success {
+        border-color: #28a745 !important;
+    }
+
+    .text-success {
+        color: #28a745 !important;
+    }
+
+    .bg-success {
+        background-color: #28a745 !important;
+    }
+
+    .input-group-text {
+        font-weight: 600;
+    }
+
+    label {
+        font-size: 1rem;
+    }
+
+    .form-label i {
+        font-size: 1.1rem;
+    }
+</style>
+
+{% endblock %}

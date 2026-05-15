@@ -1,0 +1,27 @@
+{% extends 'seller/seller_base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h4>Customer Reviews</h4>
+
+  {% for r in reviews %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h6>{{ r.food_item.name }}</h6>
+      <p>
+        {% for i in "12345"|slice:":r.rating" %}
+          ⭐
+        {% endfor %}
+      </p>
+      <p>{{ r.comment }}</p>
+
+      <small class="text-muted">
+        By {{ r.customer.username }} • {{ r.created_at|date:"d M Y" }}
+      </small>
+    </div>
+  </div>
+  {% empty %}
+  <p>No reviews yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

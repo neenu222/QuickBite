@@ -1,0 +1,19 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h4>Platform Reviews</h4>
+
+  {% for r in reviews %}
+  <div class="border p-3 mb-3">
+    <strong>{{ r.food_item.name }}</strong> —
+    {{ r.rating }} ⭐
+
+    <p>{{ r.comment }}</p>
+    <small class="text-muted">
+      {{ r.customer.username }} → {{ r.seller.username }}
+    </small>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'customer/customer_base.html' %}
+
+{% block content %}
+<div style="text-align:center; padding:60px;">
+    <h1 style="color:green;">✅ Payment Successful</h1>
+    <p>Your order has been placed successfully.</p>
+
+    <a href="{% url 'customer_home' %}" class="btn btn-success">
+        Continue Shopping
+    </a>
+</div>
+{% endblock %}

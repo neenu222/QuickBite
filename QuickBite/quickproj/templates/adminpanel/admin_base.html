@@ -1,0 +1,422 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - QuickBite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --admin-primary: #1e3a8a;
+            --admin-secondary: #3b82f6;
+            --admin-accent: #60a5fa;
+            --admin-dark: #0f172a;
+            --admin-light: #dbeafe;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-secondary) 100%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            padding: 1rem 0;
+        }
+
+        .admin-logo {
+            color: white;
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-logo i {
+            font-size: 2rem;
+        }
+
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+        }
+
+        .nav-link-custom {
+            color: white !important;
+            padding: 0.5rem 1.25rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link-custom:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-link-custom.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-separator {
+            color: rgba(255, 255, 255, 0.5);
+            margin: 0 0.25rem;
+        }
+
+        /* Messages Styles */
+        .messages-container {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .alert-custom {
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-custom i {
+            font-size: 1.5rem;
+        }
+
+        /* Content Area */
+        .content-wrapper {
+            min-height: calc(100vh - 250px);
+            padding: 2rem 0;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: var(--admin-dark);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-heading {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-menu a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-menu a:hover {
+            color: var(--admin-accent);
+            padding-left: 0.25rem;
+        }
+
+        .footer-menu a i {
+            font-size: 0.75rem;
+        }
+
+        .footer-text {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .footer-text-small {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .footer-social a {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background: var(--admin-accent);
+            transform: translateY(-3px);
+        }
+
+        .footer-contact {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+        }
+
+        .footer-contact i {
+            color: var(--admin-accent);
+            margin-right: 0.5rem;
+        }
+
+        .footer-bottom {
+            padding-top: 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .navbar-custom {
+                border-radius: 12px;
+            }
+
+            .nav-link-custom {
+                display: block;
+                margin: 0.25rem 0;
+            }
+
+            .nav-separator {
+                display: none;
+            }
+
+            .footer-heading {
+                margin-top: 1.5rem;
+            }
+
+            .footer-social {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="header-content">
+            <a href="{% url 'admin_dashboard' %}" class="admin-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>QuickBite Admin Panel</span>
+            </a>
+            
+            <nav class="navbar-custom">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start">
+                    <a href="{% url 'admin_dashboard' %}" class="nav-link-custom">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                    <span class="nav-separator">|</span>
+                    <a href="{% url 'admin_sellers' %}" class="nav-link-custom">
+                        <i class="fas fa-store"></i> Sellers
+                    </a>
+                    <span class="nav-separator">|</span>
+                    <a href="{% url 'admin_customer' %}" class="nav-link-custom">
+                        <i class="fas fa-users"></i> Customers
+                    </a>
+                    <span class="nav-separator">|</span>
+                    <a href="{% url 'admin_orders' %}" class="nav-link-custom">
+                        <i class="fas fa-shopping-cart"></i> Orders
+                    </a>
+                    <span class="nav-separator">|</span>
+                    <a href="{% url 'admin_complaints' %}" class="nav-link-custom">
+                        <i class="fas fa-exclamation-circle"></i> Complaints
+                    </a>
+                    <span class="nav-separator">|</span>
+                    <a href="{% url 'admin_categories' %}" class="nav-link-custom">
+                        <i class="fas fa-tags"></i>Categories
+                    </a>
+                    <span class="nav-separator">|</span>
+                    <a href="{% url 'logout' %}" class="nav-link-custom">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-custom alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% elif message.tags == 'warning' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+            <span>{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="content-wrapper">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="row g-4">
+            <!-- About Section -->
+            <div class="col-md-3 col-sm-6">
+                <h5 class="footer-heading">
+                    <i class="fas fa-info-circle"></i> About QuickBite
+                </h5>
+                <p class="footer-text-small">
+                    Leading food delivery platform connecting customers with their favorite restaurants.
+                </p>
+                <div class="footer-social">
+                    <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-md-3 col-sm-6">
+                <h5 class="footer-heading">
+                    <i class="fas fa-link"></i> Quick Links
+                </h5>
+                <ul class="footer-menu">
+                    <li><a href="{% url 'admin_dashboard' %}"><i class="fas fa-angle-right"></i> Dashboard</a></li>
+                    <li><a href="{% url 'admin_sellers' %}"><i class="fas fa-angle-right"></i> Manage Sellers</a></li>
+                    <li><a href="{% url 'admin_customer' %}"><i class="fas fa-angle-right"></i> Manage Customers</a></li>
+                    <li><a href="{% url 'admin_orders' %}"><i class="fas fa-angle-right"></i> View Orders</a></li>
+                    <li><a href="{% url 'admin_complaints' %}"><i class="fas fa-angle-right"></i> Handle Complaints</a></li>
+                </ul>
+            </div>
+
+            <!-- Resources -->
+            <div class="col-md-3 col-sm-6">
+                <h5 class="footer-heading">
+                    <i class="fas fa-book"></i> Resources
+                </h5>
+                <ul class="footer-menu">
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Admin Guide</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> API Documentation</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> System Status</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Reports & Analytics</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Knowledge Base</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact & Legal -->
+            <div class="col-md-3 col-sm-6">
+                <h5 class="footer-heading">
+                    <i class="fas fa-gavel"></i> Legal & Support
+                </h5>
+                <ul class="footer-menu">
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Terms of Service</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Contact Support</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Report Issue</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Security</a></li>
+                </ul>
+                <div class="footer-contact mt-3">
+                    <p class="footer-text-small mb-1">
+                        <i class="fas fa-envelope"></i> admin@quickbite.com
+                    </p>
+                    <p class="footer-text-small mb-0">
+                        <i class="fas fa-phone"></i> +1 (555) 123-4567
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 2rem 0 1rem 0;">
+
+        <div class="footer-bottom">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="footer-text mb-0">
+                        <i class="fas fa-copyright"></i> 2024 QuickBite Admin Panel - All Rights Reserved
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                    <span class="footer-text-small">
+                        <i class="fas fa-shield-check"></i> Secure Admin Portal | Version 2.0.1
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Auto-dismiss alerts after 5 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert-custom');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+    });
+</script>
+
+</body>
+</html>
