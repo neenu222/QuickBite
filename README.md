@@ -108,8 +108,6 @@ Add screenshots here.
 
 ## 🎯 Future Enhancements
 
-- Online Payment Gateway
-- Email Notifications
 - Real-time Order Tracking
 - AI-based Food Recommendations
 
