@@ -90,22 +90,6 @@ Open:
 http://127.0.0.1:8000/
 ```
 
-## 📸 Screenshots
-
-Add screenshots here.
-
-### Home Page
-
-![Home Page](screenshots/home.png)
-
-### Menu Page
-
-![Menu](screenshots/menu.png)
-
-### Cart Page
-
-![Cart](screenshots/cart.png)
-
 ## 🎯 Future Enhancements
 
 - Real-time Order Tracking
