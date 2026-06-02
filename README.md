@@ -29,12 +29,12 @@ QuickBite is a food ordering and restaurant management web application developed
 ```
 QuickBite/
 │
-├── manage.py
-├── requirements.txt
-├── QuickBite/
+├── media/
+├── quickapp/
+├── quickproj/
 ├── templates/
-├── static/
-└── media/
+├── db.sqlite3
+└── manage.py
 ```
 
 ## ⚙️ Installation
